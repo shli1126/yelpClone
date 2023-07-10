@@ -1,9 +1,11 @@
 import React, {useContext, useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 import RestaurantFinder from "../apis/RestaurantFinder";
 import {RestaurantsContext} from "../context/RestaurantsContext";
 const RestaurantList = (props) => {
 
-    const {restaurant, setRestaurants} = useContext(RestaurantsContext)
+    const {restaurants, setRestaurants} = useContext(RestaurantsContext)
+    let navigate = useNavigate()
 
     useEffect( () => {
         const fetchData = async () => {
@@ -12,10 +14,25 @@ const RestaurantList = (props) => {
                 console.log(response)
                 setRestaurants(response.data.data.restaurant);
             } catch (err) {
+                console.log(err)
             }
         }
         fetchData();
     }, [])
+    const handleDelete = async (id) => {
+        try {
+            const response = await RestaurantFinder.delete(`/${id}`)
+            setRestaurants(restaurants.filter(restaurant => {
+                return (restaurant.id !== id)
+            }))
+        } catch(err) {
+            console.log(err)
+        }
+    }
+
+    const handUpdate = (id) => {
+        navigate(`/restaurants/${id}/update`)
+    }
 
     return (
         <div className="list-group">
@@ -31,18 +48,22 @@ const RestaurantList = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>KFC</td>
-                        <td>New York</td>
-                        <td>$$</td>
-                        <td>Rating</td>
-                        <td>
-                            <button className="btn btn-warning">update</button>
-                        </td>
-                        <td>
-                            <button className="btn btn-danger">delete</button>
-                        </td>
-                    </tr>
+                    {restaurants && restaurants.map((restaurant) => {
+                        return (
+                            <tr key={restaurant.id}>
+                                <td>{restaurant.name}</td>
+                                <td>{restaurant.location}</td>
+                                <td>{"$".repeat(restaurant.price_range)}</td>
+                                <td>reviews</td>
+                                <td>
+                                    <button onClick={() => handUpdate(restaurant.id)} className="btn btn-warning">update</button>
+                                </td>
+                                <td>
+                                    <button onClick={() => handleDelete(restaurant.id)}   className="btn btn-danger">delete</button>
+                                </td>
+                            </tr>
+                        )
+                    })}
                 </tbody>
             </table>
         </div>
