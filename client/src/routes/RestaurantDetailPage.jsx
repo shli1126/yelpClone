@@ -1,9 +1,38 @@
-import React from "react";
+import React, {useContext, useEffect} from "react";
+import {useParams} from "react-router-dom";
+import {RestaurantsContext} from "../context/RestaurantsContext";
+import RestaurantFinder from "../apis/RestaurantFinder";
+import starRating from "../components/StarRating";
+import StarRating from "../components/StarRating";
+import Reviews from "../components/Reviews";
+import AddRestaurant from "../components/AddRestaurant";
+import AddReview from "../components/AddReview";
 
 const RestaurantDetailPage = () => {
+    const {id} = useParams();
+    const {selectedRestaurant, setSelectedRestaurant} = useContext(RestaurantsContext)
+    useEffect(() => {
+        const fetchData = async() => {
+            try{
+                const response = await RestaurantFinder.get(`/${id}`);
+                setSelectedRestaurant(response.data.data)
+            }catch(err) {
+                console.log(err)
+            }
+        }
+        fetchData()
+    }, []);
+
     return (
         <div>
-            RestaurantDetailPage
+            {selectedRestaurant && (
+                <>
+                    <div className="mt-3">
+                        <Reviews reviews={selectedRestaurant.reviews}/>
+                    </div>
+                    <AddReview></AddReview>
+                </>
+            )}
         </div>
     )
 }

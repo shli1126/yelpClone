@@ -17,3 +17,7 @@ J
 client/src/routes/Home.jsx,e/d/edab5ddd1b47afe63195ac020bd7a036259cbc29
 C
 server/db/index.mjs,b/f/bf42cd91183baba61abeb59e47361357440f77d6
+B
+client/src/App.jsx,5/0/502dd2d95a0b9744902f19bb45ceb8ccf0cf63a2
+P
+ client/src/routes/UpdatePage.jsx,9/b/9b419eee5cfda8ac72407a438f55a92ed8b9ab82
