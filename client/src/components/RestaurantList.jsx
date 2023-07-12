@@ -2,6 +2,7 @@ import React, {useContext, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import RestaurantFinder from "../apis/RestaurantFinder";
 import {RestaurantsContext} from "../context/RestaurantsContext";
+import StarRating from "./StarRating";
 const RestaurantList = (props) => {
 
     const {restaurants, setRestaurants} = useContext(RestaurantsContext)
@@ -11,7 +12,7 @@ const RestaurantList = (props) => {
         const fetchData = async () => {
             try {
                 const response = await RestaurantFinder.get("/")
-                console.log(response)
+                console.log(response.data.data)
                 setRestaurants(response.data.data.restaurant);
             } catch (err) {
                 console.log(err)
@@ -22,7 +23,9 @@ const RestaurantList = (props) => {
     const handleDelete = async (e, id) => {
         e.stopPropagation()
         try {
+            console.log(id)
             const response = await RestaurantFinder.delete(`/${id}`)
+            console.log(response)
             setRestaurants(restaurants.filter(restaurant => {
                 return (restaurant.id !== id)
             }))
@@ -38,6 +41,19 @@ const RestaurantList = (props) => {
 
     const handleRestaurantSelect = (id) => {
         navigate(`/restaurants/${id}`)
+    }
+
+    const renderRating = (restaurant) => {
+        if (!restaurant.count) {
+            return <span className="text-warning">0 reviews</span>
+        }
+        console.log(restaurant)
+        return (
+            <>
+            <StarRating rating={restaurant.average_rating}/>
+            <span className="text-warning ml-1">({restaurant.count})</span>
+            </>
+        )
     }
 
     return (
@@ -60,7 +76,8 @@ const RestaurantList = (props) => {
                                 <td>{restaurant.name}</td>
                                 <td>{restaurant.location}</td>
                                 <td>{"$".repeat(restaurant.price_range)}</td>
-                                <td>reviews</td>
+                                <td>{renderRating(restaurant)}</td>
+
                                 <td>
                                     <button onClick={(e) => handUpdate(e, restaurant.id)} className="btn btn-warning">update</button>
                                 </td>

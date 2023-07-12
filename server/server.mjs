@@ -13,13 +13,17 @@ app.get("/api/v1/restaurants", async (req, res) => {
     try {
         const results = await db.query(
             "SELECT * FROM restaurants"
-        )
-        // console.log(results.rows)
+        );
+        const restaurantRatingData = await db.query(
+            "select * from restaurants left join (select restaurant_id, COUNT(*), TRUNC(AVG(rating),1) as average_rating from reviews group by restaurant_id) reviews on restaurants.id = reviews.restaurant_id;"
+        );
+        // console.log("results", results)
+        // console.log("restaurantRatingData", restaurantRatingData)
         res.status(200).json({
             status: "success",
-            result: results.rows.length,
+            result: restaurantRatingData.rows.length,
             data: {
-                restaurant: results.rows,
+                restaurant: restaurantRatingData.rows,
             },
         });
     } catch (err) {
@@ -32,7 +36,7 @@ app.get("/api/v1/restaurants/:id", async (req,res) => {
     // console.log(req.params.id);
     try {
         const restaurant = await db.query(
-            "SELECT * FROM restaurants WHERE id = $1", [
+            "select * from restaurants left join (select restaurant_id, COUNT(*), TRUNC(AVG(rating),1) as average_rating from reviews group by restaurant_id) reviews on restaurants.id = reviews.restaurant_id where id = $1;", [
                 req.params.id
             ]);
 
@@ -98,10 +102,13 @@ app.put("/api/v1/restaurants/:id", async (req, res) => {
 //Delete a restaurant
 app.delete("/api/v1/restaurants/:id", async (req, res,) => {
     try {
-        const results = await db.query(
+        const result12 = await db.query(
+            "DELETE FROM reviews WHERE restaurant_id = $1", [req.params.id]
+        );
+        const result1 = await db.query(
             "DELETE FROM restaurants WHERE id = $1", [req.params.id]
         );
-        // console.log(results)
+
         res.status(204).json({
             status: "success"
         });
@@ -109,6 +116,23 @@ app.delete("/api/v1/restaurants/:id", async (req, res,) => {
         console.log(err)
     }
 });
+
+
+app.post("/api/v1/restaurants/:id/addReview", async (req, res) => {
+    try{
+        const newReview = await db.query("INSERT INTO reviews (restaurant_id, name, review, rating) values ($1, $2, $3, $4) returning *;", [
+            req.params.id, req.body.name, req.body.review, req.body.rating])
+        console.log(newReview)
+        res.status(201).json({
+            status: "success",
+            data: {
+                review: newReview.rows[0]
+            }
+        })
+    } catch(err) {
+        console.log(err)
+    }
+})
 
 
 const port = process.env.PORT || 3001;

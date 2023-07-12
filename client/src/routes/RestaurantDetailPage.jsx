@@ -1,40 +1,53 @@
-import React, {useContext, useEffect} from "react";
-import {useParams} from "react-router-dom";
-import {RestaurantsContext} from "../context/RestaurantsContext";
+import React, { useContext, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { RestaurantsContext } from "../context/RestaurantsContext";
 import RestaurantFinder from "../apis/RestaurantFinder";
-import starRating from "../components/StarRating";
-import StarRating from "../components/StarRating";
 import Reviews from "../components/Reviews";
-import AddRestaurant from "../components/AddRestaurant";
 import AddReview from "../components/AddReview";
+import StarRating from "../components/StarRating";
 
 const RestaurantDetailPage = () => {
-    const {id} = useParams();
-    const {selectedRestaurant, setSelectedRestaurant} = useContext(RestaurantsContext)
+    const { id } = useParams();
+    const { selectedRestaurant, setSelectedRestaurant } = useContext(
+        RestaurantsContext
+    );
+
     useEffect(() => {
-        const fetchData = async() => {
-            try{
+        const fetchData = async () => {
+            try {
                 const response = await RestaurantFinder.get(`/${id}`);
-                setSelectedRestaurant(response.data.data)
-            }catch(err) {
-                console.log(err)
+                setSelectedRestaurant(response.data.data);
+            } catch (err) {
+                console.log(err);
             }
-        }
-        fetchData()
+        };
+
+        fetchData();
     }, []);
+
+    if (!(selectedRestaurant.restaurant && selectedRestaurant.reviews)) {
+        return <div>Loading...</div>; // Display a loading state or placeholder
+    }
 
     return (
         <div>
-            {selectedRestaurant && (
-                <>
-                    <div className="mt-3">
-                        <Reviews reviews={selectedRestaurant.reviews}/>
-                    </div>
-                    <AddReview></AddReview>
-                </>
-            )}
+            <>
+                <h1 className="display-1">{selectedRestaurant.restaurant.name}</h1>
+                <div className="display-5">
+                    <StarRating rating={selectedRestaurant.restaurant.average_rating}/>
+                    <span className="text-warning ml-1">
+                        {selectedRestaurant.restaurant.count ? `(${selectedRestaurant.restaurant.count})` : "(0)"}
+                    </span>
+                </div>
+
+                <div className="mt-3">
+                    <Reviews reviews={selectedRestaurant.reviews} />
+                </div>
+                <AddReview />
+            </>
         </div>
-    )
-}
+    );
+};
 
 export default RestaurantDetailPage;
+

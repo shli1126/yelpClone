@@ -2,14 +2,14 @@ import React from 'react';
 import StarRating from './StarRating';
 
 const Reviews = ({ reviews }) => {
-    console.log('Reviews prop:', reviews);
-    if (!reviews || reviews.length === 0) {
-        return <p>No reviews available.</p>;
-    }
+    // console.log('Reviews prop:', reviews);
+    // if (!reviews || reviews.length === 0) {
+    //     return <p>No reviews available.</p>;
+    // }
     return (
         <div className="row row-cols-3 mb-2">
             {reviews.map((review) => {
-                console.log('Review:', review);
+                // console.log('Review:', review);
                 return (
                     <div
                         key={review.id}

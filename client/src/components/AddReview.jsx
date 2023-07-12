@@ -1,10 +1,33 @@
 import React, {useState} from 'react';
+import RestaurantFinder from "../apis/RestaurantFinder";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 
 const AddReview = () => {
+    const {id} = useParams();
+    let navigate = useNavigate()
+    const location = useLocation()
     const [name, setName] = useState("");
     const [reviewText, setReviewText] = useState("")
     const [rating, setRating] = useState("Rating");
 
+    const refreshPage= () => {
+        window.location.reload(false);
+    }
+    const handleSubmitReview = async (e) => {
+        e.preventDefault()
+        try {
+            const response = await RestaurantFinder.post(`/${id}/addReview`, {
+                name: name,
+                review: reviewText,
+                rating: rating
+            });
+            refreshPage()
+            navigate(location.pathname);
+        } catch(err) {
+            console.log(err)
+        }
+
+    }
     return (
         <div className="container">
             <div className="row justify-content-center">
@@ -49,7 +72,7 @@ const AddReview = () => {
                                         placeholder="Write your review"
                                     ></textarea>
                                 </div>
-                                <button type="submit" className="btn btn-primary">
+                                <button type="submit" onClick={handleSubmitReview} className="btn btn-primary">
                                     Submit
                                 </button>
                             </form>

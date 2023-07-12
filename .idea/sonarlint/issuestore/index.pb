@@ -21,3 +21,5 @@ P
  client/src/routes/UpdatePage.jsx,9/b/9b419eee5cfda8ac72407a438f55a92ed8b9ab82
 B
 client/src/App.jsx,5/0/502dd2d95a0b9744902f19bb45ceb8ccf0cf63a2
+S
+#client/src/apis/RestaurantFinder.js,5/f/5f62abcbc87286b34981add1281568907f518fd0
