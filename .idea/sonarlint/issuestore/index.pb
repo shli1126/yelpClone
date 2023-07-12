@@ -13,8 +13,6 @@ H
 server/.env,7/4/74c0224311d9cb9feca55cc2c27a2b847c0286e7
 A
 server/.gitignore,6/8/684633b668b24c06fe5d5ba72b7ed42a437aa655
-J
-client/src/routes/Home.jsx,e/d/edab5ddd1b47afe63195ac020bd7a036259cbc29
 C
 server/db/index.mjs,b/f/bf42cd91183baba61abeb59e47361357440f77d6
 P
@@ -23,3 +21,15 @@ B
 client/src/App.jsx,5/0/502dd2d95a0b9744902f19bb45ceb8ccf0cf63a2
 S
 #client/src/apis/RestaurantFinder.js,5/f/5f62abcbc87286b34981add1281568907f518fd0
+P
+ client/src/components/Header.jsx,5/6/5642117a826b0adce26dcf7a4aa846af2becdae9
+Z
+*client/src/routes/RestaurantDetailPage.jsx,6/f/6f0c3f8e1cc7bd30374db83ac56e8386981ce0a9
+Z
+*client/src/components/UpdateRestaurant.jsx,3/a/3a2e1908c21b33ae6350af6bca7498ecdcec1e88
+S
+#client/src/components/AddReview.jsx,d/6/d6d1b3430eca2326c8213e05c31aa2b1aa28410c
+Q
+!client/src/components/Reviews.jsx,0/6/067f7dc586d73b611261cc17db8786ff75a28c96
+X
+(client/src/context/RestaurantsContext.js,3/e/3e72077f440ee7b81579990500b98b4c91aabd6a
